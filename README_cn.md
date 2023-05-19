@@ -60,6 +60,6 @@ If you see start transmit, that means the data channel is established
 
 例如：
    1. A（192.168.1.101）机器开启listen模式`gohtran -listen 2222 3333 -aes`
-   2. B（192.168.1.100）机器开启slave模式`gohtran -slave 192.168.1.101:2222 192.168.1.100:3389 -aes`
+   2. B（192.168.1.100）机器开启slave模式`gohtran -slave 192.168.1.101:3333 192.168.1.100:3389 -aes`
    3. 这时候访问A机器端口2222才可以正常解析数据
    

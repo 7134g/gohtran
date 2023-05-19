@@ -63,6 +63,6 @@ If aes encryption or gzip compression is enabled, you need to run at least two p
 For example:
 1. A (192.168.1.101) Enable the listen mode on the machine `gohtran -listen 2222 3333 -aes`
 
-2. B (192.168.1.100) Enable the slave mode `gohtran-slave 192.168.1.101:2222 192.168.1.100:3389 -aes`
+2. B (192.168.1.100) Enable the slave mode `gohtran-slave 192.168.1.101:3333 192.168.1.100:3389 -aes`
 
 3. At this time, data can be normally parsed by accessing port 2222 on machine A
