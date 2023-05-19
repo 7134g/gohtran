@@ -1,7 +1,7 @@
 package mode
 
 import (
-	"gohtran/nhtran/params"
+	"gohtran/params"
 	"log"
 	"strconv"
 )

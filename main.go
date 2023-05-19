@@ -1,23 +1,23 @@
 package main
 
 import (
-	"gohtran/nhtran/control"
-	"gohtran/nhtran/mode"
-	"gohtran/nhtran/params"
+	"gohtran/control"
+	"gohtran/mode"
+	"gohtran/params"
 	"log"
 	"os"
 )
 
 func main() {
 	args := os.Args
-	argc := len(args)
+	argc := len(args) - 1
 
 	var core = control.NewCore()
-	for i := 0; i < argc; i++ {
+	for i := 1; i < len(args); i++ {
 		switch args[i] {
 		case params.Listen, params.Tran, params.Slave:
 			core.Net.SetDesign(args[i])
-			if argc <= i+2 {
+			if argc < i+2 {
 				log.Fatalln("params is error")
 			}
 			core.Net.FirstParam = args[i+1]

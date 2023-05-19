@@ -18,13 +18,13 @@ func checkPort(port string) error {
 }
 
 func checkAddress(address string) error {
-	re, err := regexp.Compile(`[^0-9a-zA-Z:]`)
+	re, err := regexp.Compile(`[^0-9a-zA-Z:.]`)
 	if err != nil {
 		return err
 	}
 
-	if len(re.FindString(address)) != 0 {
-		return errors.New("port params error")
+	if re.MatchString(address) {
+		return errors.New("address params error")
 	}
 	return nil
 }

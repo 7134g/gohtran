@@ -1,8 +1,8 @@
 package control
 
 import (
-	"gohtran/nhtran/mode"
-	"gohtran/nhtran/params"
+	"gohtran/mode"
+	"gohtran/params"
 	"log"
 	"time"
 )
@@ -18,7 +18,7 @@ func NewCore() *Core {
 }
 
 func (c *Core) Run() {
-	go c.connectTimeout()
+	//go c.connectTimeout()
 
 	switch c.Net.GetDesign() {
 	case params.Listen:

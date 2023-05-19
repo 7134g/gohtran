@@ -6,7 +6,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"errors"
-	"gohtran/nhtran/params"
+	"gohtran/params"
 	"io/ioutil"
 	"log"
 )

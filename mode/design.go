@@ -2,7 +2,7 @@ package mode
 
 import (
 	"fmt"
-	"gohtran/nhtran/params"
+	"gohtran/params"
 	"io"
 	"log"
 	"net"
@@ -31,10 +31,10 @@ func (n *NetMode) GetDesign() string {
 
 func (n *NetMode) Listen() error {
 	if err := checkPort(n.FirstParam); err != nil {
-		return nil
+		return err
 	}
 	if err := checkPort(n.SecondParam); err != nil {
-		return nil
+		return err
 	}
 
 	serve1, err := createServer(fmt.Sprintf("127.0.0.1:%s", n.FirstParam))
@@ -45,7 +45,8 @@ func (n *NetMode) Listen() error {
 	if err != nil {
 		return err
 	}
-
+	log.Printf("Link [127.0.0.1:%s] and [127.0.0.1:%s] are successfully established\n",
+		n.FirstParam, n.SecondParam)
 	for {
 		conn1, err := accept(serve1)
 		if err != nil {
@@ -58,6 +59,8 @@ func (n *NetMode) Listen() error {
 		if conn1 == nil || conn2 == nil {
 			continue
 		}
+
+		log.Println("client ready")
 		n.forward(conn1, conn2)
 	}
 
@@ -65,10 +68,10 @@ func (n *NetMode) Listen() error {
 
 func (n *NetMode) Tran() error {
 	if err := checkPort(n.FirstParam); err != nil {
-		return nil
+		return err
 	}
 	if err := checkAddress(n.SecondParam); err != nil {
-		return nil
+		return err
 	}
 
 	server, err := createServer(fmt.Sprintf("127.0.0.1:%s", n.FirstParam))
@@ -84,9 +87,11 @@ func (n *NetMode) Tran() error {
 		for {
 			target, err := createDial(n.SecondParam)
 			if err != nil {
+				log.Println(err)
 				time.Sleep(time.Second)
 				continue
 			}
+			log.Println("client ready")
 			n.forward(conn, target)
 			break
 		}
@@ -97,10 +102,10 @@ func (n *NetMode) Tran() error {
 
 func (n *NetMode) Slave() error {
 	if err := checkAddress(n.FirstParam); err != nil {
-		return nil
+		return err
 	}
 	if err := checkAddress(n.SecondParam); err != nil {
-		return nil
+		return err
 	}
 
 	for {
@@ -111,6 +116,7 @@ func (n *NetMode) Slave() error {
 			if err == nil {
 				break
 			} else {
+				log.Println(err)
 				time.Sleep(time.Second)
 			}
 		}
@@ -119,9 +125,11 @@ func (n *NetMode) Slave() error {
 			if err == nil {
 				break
 			} else {
+				log.Println(err)
 				time.Sleep(time.Second)
 			}
 		}
+		log.Println("client ready")
 		n.forward(target1, target2)
 
 	}
