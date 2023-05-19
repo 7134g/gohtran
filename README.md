@@ -1,6 +1,7 @@
+- [中文文档](https://github.com/7134g/gohtran/blob/main/README_cn.md)
+
 # gohtran
 Golang version of the Htran tool
-[中文文档](https://github.com/7134g/gohtran/blob/main/README_cn.md)
 
 What can ## do
 Connect different ports in series
