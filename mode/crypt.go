@@ -11,38 +11,24 @@ import (
 	"log"
 )
 
-const (
-	_ uint = iota
-	encrypt
-	decrypt
-	compression
-	decompression
-)
-
 type CryptMode struct {
-	cryptFunc func([]byte) ([]byte, error)
+	SideParams      string
+	OperationParams uint
 
-	script string
+	stata bool
+	//script string
 	AesKey []byte
 }
 
-func (c *CryptMode) SetScript(s string) {
-	c.script = s
-	//switch s {
-	//case params.Aes:
-	//	c.cryptFunc = c.Aes
-	//case params.Gzip:
-	//	c.cryptFunc = c.Gzip
-	//case params.AesGzip:
-	//	c.cryptFunc = c.AesGzip
-	//}
+func (c *CryptMode) Open() {
+	c.stata = true
 }
 
-func (c *CryptMode) GetScript() string {
-	return c.script
+func (c *CryptMode) GetStata() bool {
+	return c.stata
 }
 
-func (c *CryptMode) Aes(p *pack) error {
+func (c *CryptMode) Aes(p *packet) error {
 	switch p.header[params.AesLocal] {
 	case params.AesEncryptSingle:
 		p.header[params.AesLocal] = params.AesDecryptSingle
@@ -59,7 +45,7 @@ func (c *CryptMode) Aes(p *pack) error {
 	return nil
 }
 
-func (c *CryptMode) Gzip(p *pack) error {
+func (c *CryptMode) Gzip(p *packet) error {
 
 	switch p.header[params.GzipLocal] {
 	case params.GzipEncryptSingle:
@@ -78,7 +64,7 @@ func (c *CryptMode) Gzip(p *pack) error {
 	return nil
 }
 
-func (c *CryptMode) AesGzip(p *pack) error {
+func (c *CryptMode) AesGzip(p *packet) error {
 	switch p.header[params.AesLocal] {
 	case params.Plaintext, params.AesEncryptSingle:
 		err := c.Aes(p)
@@ -97,10 +83,6 @@ func (c *CryptMode) AesGzip(p *pack) error {
 	}
 	return nil
 
-}
-
-func (c *CryptMode) IsOpen() bool {
-	return !(len(c.script) == 0)
 }
 
 func AESEncrypt(origData, key []byte) []byte {

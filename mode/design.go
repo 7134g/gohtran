@@ -11,9 +11,9 @@ import (
 )
 
 type NetMode struct {
-	Crypt CryptMode
+	wg sync.WaitGroup
 
-	netFunc func() error
+	Crypt CryptMode
 
 	design string
 
@@ -136,32 +136,45 @@ func (n *NetMode) Slave() error {
 
 }
 
-func (n *NetMode) forward(conn1 net.Conn, conn2 net.Conn) {
-	var wg sync.WaitGroup
-	wg.Add(2)
-	go n.connCopy(conn1, conn2, &wg)
-	go n.connCopy(conn2, conn1, &wg)
-	wg.Wait()
-}
+func (n *NetMode) forward(leftConn net.Conn, rightConn net.Conn) {
+	n.wg.Add(2)
 
-func (n *NetMode) connCopy(wConn net.Conn, rConn net.Conn, wg *sync.WaitGroup) {
-	defer func() {
-		_ = wConn.Close()
-	}()
-
-	if n.Crypt.IsOpen() {
-		n.connReadWrite(wConn, rConn)
+	if n.Crypt.GetStata() {
+		switch n.Crypt.SideParams {
+		case params.Left:
+			go n.cryptConn(rightConn, leftConn, true)
+			go n.cryptConn(leftConn, rightConn, false)
+			break
+		case params.Right:
+			go n.cryptConn(rightConn, leftConn, false)
+			go n.cryptConn(leftConn, rightConn, true)
+			break
+		}
 	} else {
-		// plaintext
-		_, _ = io.Copy(wConn, rConn)
+		go n.connCopy(leftConn, rightConn)
+		go n.connCopy(rightConn, leftConn)
 	}
 
-	wg.Done()
+	n.wg.Wait()
 }
 
-func (n *NetMode) connReadWrite(wConn net.Conn, rConn net.Conn) {
-	var netPack *pack
+func (n *NetMode) connCopy(c1 net.Conn, c2 net.Conn) {
+	defer func() {
+		_ = c1.Close()
+		n.wg.Done()
+	}()
 
+	_, _ = io.Copy(c1, c2)
+
+}
+
+func (n *NetMode) cryptConn(wConn net.Conn, rConn net.Conn, plaintext bool) {
+	defer func() {
+		_ = wConn.Close()
+		n.wg.Done()
+	}()
+
+	var netPack *packet
 	chunk := make([]byte, 1024)
 
 	for {
@@ -175,23 +188,28 @@ func (n *NetMode) connReadWrite(wConn net.Conn, rConn net.Conn) {
 			return
 		case rCont > 0:
 			switch {
-			case netPack == nil:
-				netPack = NewPack(chunk)
-				netPack = n.sendData(netPack, wConn)
-			case netPack != nil:
-				netPack.push(chunk)
-				netPack = n.sendData(netPack, wConn)
-			}
-			if netPack.complete {
-				netPack = nil
-			}
+			case err != nil:
+				return
+			case rCont > 0:
+				switch {
+				case netPack == nil:
+					netPack = newPacket(chunk, plaintext)
+					netPack = n.sendData(netPack, wConn)
+				case netPack != nil:
+					netPack.push(chunk)
+					netPack = n.sendData(netPack, wConn)
+				}
+				if netPack.complete {
+					netPack = nil
+				}
 
+			}
 		}
 
 	}
 }
 
-func (n *NetMode) sendData(pack *pack, wConn net.Conn) *pack {
+func (n *NetMode) sendData(pack *packet, wConn net.Conn) *packet {
 	for {
 		if !pack.complete {
 			return pack
@@ -202,22 +220,22 @@ func (n *NetMode) sendData(pack *pack, wConn net.Conn) *pack {
 		}
 		_, _ = wConn.Write(n.buildPackage(pack))
 
-		if pack.getDeep() == nil {
-			return pack
-		}
 		pack = pack.getDeep()
+		if pack == nil {
+			return nil
+		}
 
 	}
 }
 
-func (n *NetMode) buildPackage(p *pack) []byte {
+func (n *NetMode) buildPackage(p *packet) []byte {
 	var err error
-	switch n.GetDesign() {
-	case params.Aes:
+	switch n.Crypt.OperationParams {
+	case params.NewAes:
 		err = n.Crypt.Aes(p)
-	case params.Gzip:
+	case params.NewGzip:
 		err = n.Crypt.Gzip(p)
-	case params.AesGzip:
+	case params.NewAesGzip:
 		err = n.Crypt.AesGzip(p)
 	default:
 		log.Println("cannot find crypt type")
@@ -230,4 +248,5 @@ func (n *NetMode) buildPackage(p *pack) []byte {
 	}
 
 	return append(p.header, p.body...)
+
 }

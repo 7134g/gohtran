@@ -18,7 +18,7 @@ func NewCore() *Core {
 }
 
 func (c *Core) Run() {
-	//go c.connectTimeout()
+	go c.connectTimeout()
 
 	switch c.Net.GetDesign() {
 	case params.Listen:

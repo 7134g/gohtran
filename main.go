@@ -6,6 +6,7 @@ import (
 	"gohtran/params"
 	"log"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -17,24 +18,24 @@ func main() {
 		switch args[i] {
 		case params.Listen, params.Tran, params.Slave:
 			core.Net.SetDesign(args[i])
-			if argc < i+2 {
+			if argc < i+2 || params.ExistParams(args[i+1]) || params.ExistParams(args[i+2]) {
 				log.Fatalln("params is error")
 			}
 			core.Net.FirstParam = args[i+1]
 			core.Net.SecondParam = args[i+2]
 			i += 2
 			break
-		case params.Aes, params.AesGzip:
-			core.Net.Crypt.SetScript(args[i])
-			if argc > i+1 && !params.ExistParams(args[i+1]) {
-				core.Net.Crypt.AesKey = []byte(args[i+1])
-			} else {
-				core.Net.Crypt.AesKey = params.AesDefaultKey
+		case params.Left, params.Right:
+			core.Net.Crypt.Open()
+			core.Net.Crypt.SideParams = args[i]
+			if argc < i+1 || params.ExistParams(args[i+1]) {
+				log.Fatalln("params is error")
 			}
-			break
-		case params.Gzip:
-			core.Net.Crypt.SetScript(args[i])
-			break
+			op, err := strconv.Atoi(args[i+1])
+			if err != nil {
+				log.Fatalln(err)
+			}
+			core.Net.Crypt.OperationParams = uint(op)
 		case params.Slice:
 			mode.Slice()
 			break
