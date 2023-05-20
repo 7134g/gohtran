@@ -66,11 +66,17 @@ If you see start transmit, that means the data channel is established
 
 
 #### Points to Note
-If aes encryption or gzip compression is enabled, you need to run at least two programs to encrypt and decrypt properly
+If aes encryption or gzip compression is enabled, you need to run at least two programs to encrypt and decryption properly
 
 For example:
-1. A (192.168.1.101) Enable the listen mode on the machine `gohtran -listen 2222 3333 -l aes`
 
-2. B (192.168.1.100) Enable the slave mode `gohtran-slave 192.168.1.101:3333 192.168.1.100:3389 -r aes`
+For example, if servers A and B exist, you want to connect to server B through 192.168.1.100:2222 of server A and encrypt the network transmission between the two servers.
 
-3. At this time, data can be normally parsed by accessing port 2222 on machine A
+1. Enable the listen mode on machine A (192.168.1.101)
+- `gohtran -listen 2222 3333 -left aes`
+
+2. Example Enable the slave mode on machine B (192.168.1.100)
+- `gohtran -slave 192.168.1.100:3333 192.168.1.101:3389 -right aes`
+
+3. If you access port 2222 on machine A, you can get the correct connection to machine B 3389
+   
