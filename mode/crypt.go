@@ -34,7 +34,7 @@ func (c *CryptMode) Aes(p *packet) error {
 		p.header[params.AesLocal] = params.AesDecryptSingle
 		p.body = AESEncrypt(p.body, c.AesKey)
 	case params.AesDecryptSingle:
-		p.header[params.AesLocal] = params.AesEncryptSingle
+		p.header = nil
 		p.body = AESDecrypt(p.body, c.AesKey)
 	case params.Plaintext:
 		p.header[params.AesLocal] = params.AesDecryptSingle
@@ -52,7 +52,7 @@ func (c *CryptMode) Gzip(p *packet) error {
 		p.header[params.GzipLocal] = params.GzipDecryptSingle
 		p.body = Compression(p.body)
 	case params.GzipDecryptSingle:
-		p.header[params.GzipLocal] = params.GzipEncryptSingle
+		p.header = nil
 		p.body = Decompress(p.body)
 	case params.Plaintext:
 		p.header[params.GzipLocal] = params.GzipDecryptSingle

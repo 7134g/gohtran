@@ -45,12 +45,15 @@ go build .
 usage: "-listen port1 port2" #example: "gohtran -listen 8888 3389"
        "-tran port1 ip:port2" #example: "gohtran -tran 8888 1.1.1.1:3389"
        "-slave ip1:port1 ip2:port2" #example: "gohtran -slave 127.0.0.1:3389 1.1.1.1:8888"
-       "-e enable gzip and aes functionality
-       "-aes enable aes functionality, parameters is key, defaults to 16 bits
-       "-gzip enable gzip functionality
-       "-h -help program documentation
-       "-s -silent silent mode,no information is displayed
+       "-left The options are 1, 2, and 3
+       "-right The options are 1, 2, and 3
+       "-h program documentation
+       "-s silent mode,no information is displayed
        "-log output transferred data to file
+       
+The value of 1 corresponds to aes encryption and decryption
+The value of 2 corresponds to gzip compression and decompression
+The value of 3 corresponds to the simultaneous use of aes and gzip
 ============================================================
 If you see start transmit, that means the data channel is established
 ```
@@ -59,7 +62,7 @@ If you see start transmit, that means the data channel is established
 若开启了aes加密或者gzip压缩，则至少需要运行两个程序才可以正常加解密
 
 例如：
-   1. A（192.168.1.101）机器开启listen模式`gohtran -listen 2222 3333 -aes`
-   2. B（192.168.1.100）机器开启slave模式`gohtran -slave 192.168.1.101:3333 192.168.1.100:3389 -aes`
+   1. A（192.168.1.101）机器开启listen模式`gohtran -listen 2222 3333 -l aes`
+   2. B（192.168.1.100）机器开启slave模式`gohtran -slave 192.168.1.101:3333 192.168.1.100:3389 -r aes`
    3. 这时候访问A机器端口2222才可以正常解析数据
    

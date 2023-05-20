@@ -6,7 +6,7 @@ import (
 )
 
 func TestAESEncrypt(t *testing.T) {
-	key := []byte("!@#$%^&*()_+")
+	key := []byte("!@#$%^&*()_+reds")
 	origData := []byte("123456")
 	fmt.Println(len(origData), string(origData))
 

@@ -1,6 +1,7 @@
 package mode
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -25,7 +26,7 @@ func TestPack(t *testing.T) {
 
 	t.Run("single", func(t *testing.T) {
 		t.Log("need 7")
-		p := NewPack(data1)
+		p := newPacket(data1, false)
 		t.Log(len(p.body))
 		t.Log(string(p.body))
 		t.Log(p)
@@ -33,7 +34,7 @@ func TestPack(t *testing.T) {
 
 	t.Run("single_deletion", func(t *testing.T) {
 		t.Log("need 20")
-		p := NewPack(data2_1)
+		p := newPacket(data2_1, false)
 		t.Log(len(p.body))
 		t.Log(string(p.body))
 		t.Log(p)
@@ -51,4 +52,11 @@ func TestPack(t *testing.T) {
 		t.Log(p)
 	})
 
+}
+
+func TestName(t *testing.T) {
+	t.Log(fmt.Sprintf("%04d", 10))
+	t.Log(fmt.Sprintf("%04d", 102))
+	t.Log(fmt.Sprintf("%04d", 1024))
+	t.Log(fmt.Sprintf("%04d", 10240))
 }

@@ -191,16 +191,17 @@ func (n *NetMode) cryptConn(wConn net.Conn, rConn net.Conn, plaintext bool) {
 			case err != nil:
 				return
 			case rCont > 0:
+				data := chunk[:rCont]
 				switch {
 				case netPack == nil:
-					netPack = newPacket(chunk, plaintext)
+					netPack = newPacket(data, plaintext)
 					netPack = n.sendData(netPack, wConn)
 				case netPack != nil:
-					netPack.push(chunk)
+					netPack.push(data)
 					netPack = n.sendData(netPack, wConn)
-				}
-				if netPack.complete {
-					netPack = nil
+					if netPack.complete {
+						netPack = nil
+					}
 				}
 
 			}
@@ -245,6 +246,16 @@ func (n *NetMode) buildPackage(p *packet) []byte {
 	if err != nil {
 		log.Println("crypt error")
 		return nil
+	}
+
+	if p.header == nil {
+		// plaintext
+		return p.body
+	}
+	length := fmt.Sprintf("%04d", len(p.body))
+	for i, s := range length {
+		b := byte(s)
+		p.header[i+2] = b
 	}
 
 	return append(p.header, p.body...)

@@ -48,14 +48,18 @@ According to the above functions, infinite series of all accessible machines can
 usage: "-listen port1 port2" #example: "gohtran -listen 8888 3389"
        "-tran port1 ip:port2" #example: "gohtran -tran 8888 1.1.1.1:3389"
        "-slave ip1:port1 ip2:port2" #example: "gohtran -slave 127.0.0.1:3389 1.1.1.1:8888"
-       "-e enable gzip and aes functionality
-       "-aes enable aes functionality, parameters is key, defaults to 16 bits
-       "-gzip enable gzip functionality
-       "-h -help program documentation
-       "-s -silent silent mode,no information is displayed
+       "-left The options are 1, 2, and 3
+       "-right The options are 1, 2, and 3
+       "-h program documentation
+       "-s silent mode,no information is displayed
        "-log output transferred data to file
+       
+The value of 1 corresponds to aes encryption and decryption
+The value of 2 corresponds to gzip compression and decompression
+The value of 3 corresponds to the simultaneous use of aes and gzip
 ============================================================
 If you see start transmit, that means the data channel is established
+
 ```
 
 
@@ -63,8 +67,8 @@ If you see start transmit, that means the data channel is established
 If aes encryption or gzip compression is enabled, you need to run at least two programs to encrypt and decrypt properly
 
 For example:
-1. A (192.168.1.101) Enable the listen mode on the machine `gohtran -listen 2222 3333 -aes`
+1. A (192.168.1.101) Enable the listen mode on the machine `gohtran -listen 2222 3333 -l aes`
 
-2. B (192.168.1.100) Enable the slave mode `gohtran-slave 192.168.1.101:3333 192.168.1.100:3389 -aes`
+2. B (192.168.1.100) Enable the slave mode `gohtran-slave 192.168.1.101:3333 192.168.1.100:3389 -r aes`
 
 3. At this time, data can be normally parsed by accessing port 2222 on machine A

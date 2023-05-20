@@ -18,5 +18,5 @@ var (
 	GzipEncryptSingle byte = '#' // gzip compression
 	GzipDecryptSingle byte = '&' // gzip decompression
 
-	AesDefaultKey = []byte("}3#*%-&*{+>?")
+	AesDefaultKey = []byte("}3#*%-&*{+>?@8;'")
 )

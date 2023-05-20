@@ -14,11 +14,13 @@ type Core struct {
 }
 
 func NewCore() *Core {
-	return &Core{stop: make(chan struct{})}
+	c := &Core{stop: make(chan struct{})}
+	c.Net.Crypt.AesKey = params.AesDefaultKey
+	return c
 }
 
 func (c *Core) Run() {
-	go c.connectTimeout()
+	//go c.connectTimeout()
 
 	switch c.Net.GetDesign() {
 	case params.Listen:

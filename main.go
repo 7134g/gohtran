@@ -36,6 +36,7 @@ func main() {
 				log.Fatalln(err)
 			}
 			core.Net.Crypt.OperationParams = uint(op)
+			i++
 		case params.Slice:
 			mode.Slice()
 			break
@@ -44,11 +45,13 @@ func main() {
 				log.Fatalln("you need to specify the file path")
 			}
 			mode.Log(args[i+1])
+			i++
 			break
 		case params.Help:
 			mode.Help()
 			os.Exit(0)
-
+		default:
+			log.Fatalf("%s doesn't exist", args[i])
 		}
 
 	}
