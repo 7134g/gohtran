@@ -15,7 +15,7 @@ type Core struct {
 
 func NewCore() *Core {
 	c := &Core{stop: make(chan struct{})}
-	c.Net.Crypt.AesKey = params.AesDefaultKey
+	c.Net.Crypt.SetAesKey(params.AesDefaultKey)
 	return c
 }
 

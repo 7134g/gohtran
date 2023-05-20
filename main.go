@@ -36,6 +36,10 @@ func main() {
 				log.Fatalln(err)
 			}
 			core.Net.Crypt.OperationParams = uint(op)
+			if argc == i+2 && !params.ExistParams(args[i+2]) {
+				core.Net.Crypt.SetAesKey(args[i+2])
+				i++
+			}
 			i++
 		case params.Slice:
 			mode.Slice()

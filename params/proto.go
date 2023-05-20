@@ -1,11 +1,9 @@
 package params
 
-import "regexp"
-
 var (
-	HeaderLen       = 6
-	Header          = []byte("000000")
-	HeaderRegexp, _ = regexp.Compile(`^[$%][#&][0-9]{4}`)
+	HeaderLen = 6
+	Header    = []byte("000000")
+	//HeaderRegexp, _ = regexp.Compile(`^[$%][#&][0-9]{4}`)
 
 	AesLocal       = 0
 	GzipLocal      = 1
@@ -18,5 +16,5 @@ var (
 	GzipEncryptSingle byte = '#' // gzip compression
 	GzipDecryptSingle byte = '&' // gzip decompression
 
-	AesDefaultKey = []byte("}3#*%-&*{+>?@8;'")
+	AesDefaultKey = "}3#*%-&*{+>?@8;'"
 )

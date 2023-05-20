@@ -5,15 +5,11 @@ const (
 	Tran   = "-tran"
 	Slave  = "-slave"
 
-	Left            = "-left"
-	Right           = "-right"
-	NewAes     uint = 1
-	NewGzip    uint = 2
-	NewAesGzip uint = 3
-
-	//Aes     = "-aes"
-	//Gzip    = "-gzip"
-	//AesGzip = "-e"
+	Left         = "-left"
+	Right        = "-right"
+	Aes     uint = 1
+	Gzip    uint = 2
+	AesGzip uint = 3
 
 	Slice = "-s"
 	Help  = "-h"
@@ -31,7 +27,7 @@ func ExistParams(p interface{}) bool {
 		}
 	case uint:
 		switch p {
-		case NewAes, NewGzip, NewAesGzip:
+		case Aes, Gzip, AesGzip:
 			return true
 		default:
 			return false

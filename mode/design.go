@@ -232,11 +232,11 @@ func (n *NetMode) sendData(pack *packet, wConn net.Conn) *packet {
 func (n *NetMode) buildPackage(p *packet) []byte {
 	var err error
 	switch n.Crypt.OperationParams {
-	case params.NewAes:
+	case params.Aes:
 		err = n.Crypt.Aes(p)
-	case params.NewGzip:
+	case params.Gzip:
 		err = n.Crypt.Gzip(p)
-	case params.NewAesGzip:
+	case params.AesGzip:
 		err = n.Crypt.AesGzip(p)
 	default:
 		log.Println("cannot find crypt type")

@@ -17,7 +17,18 @@ type CryptMode struct {
 
 	stata bool
 	//script string
-	AesKey []byte
+	aesKey []byte
+}
+
+func (c *CryptMode) SetAesKey(key string) {
+	if len(key) == 16 {
+		log.Fatalln("The key must have 16 bits")
+	}
+	c.aesKey = []byte(key)
+}
+
+func (c *CryptMode) GetAesKey() []byte {
+	return c.aesKey
 }
 
 func (c *CryptMode) Open() {
@@ -32,13 +43,13 @@ func (c *CryptMode) Aes(p *packet) error {
 	switch p.header[params.AesLocal] {
 	case params.AesEncryptSingle:
 		p.header[params.AesLocal] = params.AesDecryptSingle
-		p.body = AESEncrypt(p.body, c.AesKey)
+		p.body = AESEncrypt(p.body, c.aesKey)
 	case params.AesDecryptSingle:
 		p.header = nil
-		p.body = AESDecrypt(p.body, c.AesKey)
+		p.body = AESDecrypt(p.body, c.aesKey)
 	case params.Plaintext:
 		p.header[params.AesLocal] = params.AesDecryptSingle
-		p.body = AESEncrypt(p.body, c.AesKey)
+		p.body = AESEncrypt(p.body, c.aesKey)
 	default:
 		return errors.New("crypt error")
 	}
