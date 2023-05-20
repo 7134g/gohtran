@@ -17,7 +17,7 @@ Call up mstsc through win+R and enter the local address 127.0.0.1:2222 to connec
 
 Same thing with linux
 
-- `ssh-p 2222 username@127.0.0.1`
+- `ssh -p 2222 username@127.0.0.1`
 
 You can connect to 3389 on the machine 192.168.1.100 by connecting to port 2222 locally
 
@@ -35,12 +35,12 @@ By binding port 2222 on the local to port 3333 on the local, data written to por
 2. Forward the data to a remote host
 
 When you link to 127.0.0.1:2222, you actually access port 192.168.1.100:3306
-- `gohtran-tran 2222 192.168.1.100:3306`
+- `gohtran -tran 2222 192.168.1.100:3306`
 3. Reverse connection forwarding
 
 Link the ports of machine A (192.168.1.101) and machine B (192.168.1.100) at the same time.
 When other machines remotely link to port 2222 of machine A, they actually link to port 3389 of machine B
-- `gohtran-slave 192.168.1.101:2222 192.168.1.100:3389`
+- `gohtran -slave 192.168.1.101:2222 192.168.1.100:3389`
 
 
 According to the above functions, infinite series of all accessible machines can be realized
