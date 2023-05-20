@@ -1,6 +1,8 @@
 # gohtran
 Golang 版本的 Htran 工具
 
+提供了aes和gzip加密压缩数据传输
+
 ## 能做什么
 实现不同端口串联在一起
 

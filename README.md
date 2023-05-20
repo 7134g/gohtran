@@ -3,7 +3,9 @@
 # gohtran
 Golang version of the Htran tool
 
-What can ## do
+Provides aes and gzip encryption for compressed data transmission
+
+## What can do
 Connect different ports in series
 
 ## For example:
