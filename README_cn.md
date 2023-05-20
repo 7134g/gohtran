@@ -74,3 +74,4 @@ If you see start transmit, that means the data channel is established
 
 3. 这时候访问A机器端口2222就可以获取正确连接到B机器3389
    
+![example](./example.png)

@@ -1,4 +1,4 @@
-- [中文文档](https://github.com/7134g/gohtran/blob/main/README_cn.md)
+- [中文文档](./README_cn.md)
 
 # gohtran
 Golang version of the Htran tool
@@ -80,3 +80,4 @@ For example, if servers A and B exist, you want to connect to server B through 1
 
 3. If you access port 2222 on machine A, you can get the correct connection to machine B 3389
    
+![example](./example.png)
